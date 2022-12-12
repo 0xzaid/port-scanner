@@ -3,6 +3,20 @@
 Port Scanner project using Python for [FreeCodeCamp](https://www.freecodecamp.org/learn/information-security/information-security-projects/port-scanner)
 I have improved it by making it usable through a terminal, and I plan to add more features.
 
+# Install
+
+Open your terminal or command prompt.
+Navigate to the directory where you want to clone the project.
+
+Use the command ```git clone``` followed by the project's URL from GitHub.
+```git clone https://github.com/0xzaid/port-scanner.git```
+
+This will create a new directory with the project's name in the current directory.
+Navigate to the project's directory using the "cd" command.
+```cd port-scanner```
+
+The project should is now on your machine.
+
 # Usage
 
 To use port_scanner.py, open a terminal or command prompt and navigate to the directory where the program is saved. Then, run the following command:
