@@ -104,13 +104,12 @@ def main():
     # Add the arguments
     parser.add_argument("target", help="the target to scan")
     parser.add_argument("port_range", help="the range of ports to scan")
-    parser.add_argument("-v", "--verbose",
-                        help="enable verbose output", action="store_true")
+    parser.add_argument("-v", "--verbose",help="enable verbose output", action="store_true")
 
     # Parse the arguments
     args = parser.parse_args()
 
-    # convert port_range to a list of integers
+    # convert port_range to a list of integersp
     args.port_range = list(map(int, args.port_range.split('-')))
 
     # Run the port scanner with the given arguments
