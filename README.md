@@ -21,3 +21,22 @@ Open ports for example.com:
 PORT    SERVICE
 80      http
 ```
+
+To ask for help:
+```
+python port_scanner.py -h
+```
+This results in:
+```
+usage: port_scanner.py [-h] [-v] target port_range
+
+Port scanner
+
+positional arguments:
+  target         the target to scan
+  port_range     the range of ports to scan
+
+options:
+  -h, --help     show this help message and exit
+  -v, --verbose  enable verbose output
+```
