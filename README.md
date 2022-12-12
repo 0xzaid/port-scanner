@@ -5,7 +5,7 @@ I have improved it by making it usable through a terminal, and I plan to add mor
 
 # Install
 
-Open your terminal or command prompt.
+Open your terminal or command prompt.  
 Navigate to the directory where you want to clone the project.
 
 Use the command ```git clone``` followed by the project's URL from GitHub.
