@@ -7,7 +7,7 @@ I have improved it by making it usable through a terminal, and I plan to add mor
 
 To use port_scanner.py, open a terminal or command prompt and navigate to the directory where the program is saved. Then, run the following command:
 ```
-python port_scanner.py <target> <port_range> -o <file_name> -v
+python port_scanner.py <target> <port_range> -o <file_name> -t <no_of_threads> -v
 ```
 
 Replace <target>, <port_range>, with the desired values for each argument. For example, to scan the host "example.com" for open ports in the range 1-1024 and print detailed information about the scan results, you could run the following command:
@@ -28,7 +28,7 @@ python port_scanner.py -h
 ```
 This results in:
 ```
-usage: port_scanner.py [-h] [-o OUTPUT] [-v] target port_range
+usage: port_scanner.py [-h] [-o OUTPUT] [-t THREADS] [-v] target port_range
 
 Simple Port scanner developed in Python
 
@@ -40,5 +40,7 @@ options:
   -h, --help            show this help message and exit
   -o OUTPUT, --output OUTPUT
                         output file name
+  -t THREADS, --threads THREADS
+                        specify the number of threads
   -v, --verbose         enable verbose output
 ```

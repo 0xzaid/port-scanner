@@ -3,6 +3,8 @@ import re
 import socket
 import common_ports
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+from threading import Lock
 
 """
 TODO: Add support for using UDP instead of TCP   
@@ -49,13 +51,26 @@ def is_valid_ip(hostname):
         return False
 
 
-def get_open_ports(target, port_range, verbose=False):
+def scan_port(port, target, open_ports, lock):
+    # Use the socket module to create a connection to the target
+    # on the specified port
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    connection = s.connect_ex((target, port))
+
+    # If the connection returns a 0, it means the port is open
+    if connection == 0:
+        # Acquire the lock before modifying the open_ports list
+        with lock:
+            open_ports.append(port)
+
+    # close the socket
+    s.close()
+
+
+def get_open_ports(target, port_range, verbose=False, threads=10):
     open_ports = []
     result = ""
     valid = False
-
-    # create a socket object
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     if is_valid_ip(target):
         valid = True
@@ -70,19 +85,20 @@ def get_open_ports(target, port_range, verbose=False):
 
     if valid:
         # Use a for loop to iterate over the range of ports
+        # Create a thread pool with a specified number of threads
+        pool = ThreadPoolExecutor(max_workers=threads)
+        print(f"Scanning {target} for open ports using {threads} threads...")
+
+        # Create a lock for synchronizing access to the list of open ports
+        lock = Lock()
+
+        # Iterate over the ports in the range
         for port in range(port_range[0], port_range[-1]+1):
-            # Use the socket module to create a connection to the target
-            # on the current port in the loop
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            connection = s.connect_ex((target, port))
+            # Use the thread pool to execute the scan task on a separate thread
+            pool.submit(scan_port, port, target, open_ports, lock)
 
-            # If the connection returns a 0, it means the port is open
-            if connection == 0:
-                # Add the open port to the list of open ports
-                open_ports.append(port)
-
-            # close the socket
-            s.close()
+        # Wait for all the threads in the pool to complete
+        pool.shutdown()
 
     if verbose:
         # get the hostname
@@ -121,13 +137,15 @@ def main():
     parser.add_argument("target", help="the target to scan")
     parser.add_argument("port_range", help="the range of ports to scan")
     parser.add_argument("-o", "--output", help="output file name")
+    parser.add_argument(
+        "-t", "--threads", help="specify the number of threads", default=10, type=int)
     parser.add_argument("-v", "--verbose",
                         help="enable verbose output", action="store_true")
 
     # Parse the arguments
     args = parser.parse_args()
 
-    # convert port_range to a list of integersp
+    # convert port_range to a list of integers
     args.port_range = list(map(int, args.port_range.split('-')))
 
     # check if the -o option was used and a file name was given
@@ -138,7 +156,7 @@ def main():
     else:
         # either the -o option was not used, or no file name was given
         # in either case, print the scan results to the console
-        print(get_open_ports(args.target, args.port_range, args.verbose))
+        print(get_open_ports(args.target, args.port_range, args.verbose, args.threads))
 
 
 if __name__ == "__main__":
