@@ -94,17 +94,20 @@ def get_open_ports(target, port_range, verbose=False):
 
         return result
     else:
-        return open_ports
+        return str(open_ports)
 
 
 def main():
     # Create the parser
-    parser = argparse.ArgumentParser(description="Port scanner")
+    parser = argparse.ArgumentParser(
+        description="Simple Port scanner developed in Python")
 
     # Add the arguments
     parser.add_argument("target", help="the target to scan")
     parser.add_argument("port_range", help="the range of ports to scan")
-    parser.add_argument("-v", "--verbose",help="enable verbose output", action="store_true")
+    parser.add_argument("-o", "--output", help="output file name")
+    parser.add_argument("-v", "--verbose",
+                        help="enable verbose output", action="store_true")
 
     # Parse the arguments
     args = parser.parse_args()
@@ -112,8 +115,15 @@ def main():
     # convert port_range to a list of integersp
     args.port_range = list(map(int, args.port_range.split('-')))
 
-    # Run the port scanner with the given arguments
-    print(get_open_ports(args.target, args.port_range, args.verbose))
+    # check if the -o option was used and a file name was given
+    if args.output and args.output != "":
+        # a file name was given, so write the scan results to the specified file
+        with open(args.output, "w") as f:
+            f.write(get_open_ports(args.target, args.port_range, args.verbose))
+    else:
+        # either the -o option was not used, or no file name was given
+        # in either case, print the scan results to the console
+        print(get_open_ports(args.target, args.port_range, args.verbose))
 
 
 if __name__ == "__main__":
