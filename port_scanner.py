@@ -4,6 +4,21 @@ import socket
 import common_ports
 import argparse
 
+"""
+TODO: Add support for using UDP instead of TCP   
+      You can do this by passing socket.SOCK_DGRAM as the second parameter to 
+      the socket.socket method, instead of socket.SOCK_STREAM
+      s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      
+TODO: Add support for IPv6 addresses
+      You can do this by passing socket.AF_INET6 as the first parameter to
+      the socket.socket method
+      
+TODO: Add support for using a file containing a list of hosts
+      new argument -i <file_name>
+      
+TODO: Generate requirements.txt file
+"""
 
 def is_valid_ip(hostname):
     # First, we check if the hostname is an IP address
